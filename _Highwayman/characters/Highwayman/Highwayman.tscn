@@ -1,0 +1,649 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=1]
+[ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=2]
+[ext_resource path="res://_Highwayman/characters/Highwayman/HWMspriteframes.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://_Highwayman/characters/Highwayman/States/EmptyState.gd" type="Script" id=4]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/PistolShot.png" type="Texture" id=5]
+[ext_resource path="res://characters/states/Idle.gd" type="Script" id=6]
+[ext_resource path="res://_Highwayman/characters/Highwayman/DuelistsAdvance.gd" type="Script" id=7]
+[ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=8]
+[ext_resource path="res://sound/common/slash1.wav" type="AudioStream" id=9]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/LowShot.png" type="Texture" id=10]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/DuelistsAdvance.png" type="Texture" id=11]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Idle.png" type="Texture" id=12]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/DoubleCross.png" type="Texture" id=13]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/WickedSlice.png" type="Texture" id=14]
+[ext_resource path="res://_Highwayman/characters/Highwayman/DuelistLeap.gd" type="Script" id=15]
+[ext_resource path="res://_Highwayman/characters/Highwayman/ActionData/DuelistAdvanceData.tscn" type="PackedScene" id=16]
+[ext_resource path="res://_Highwayman/characters/Highwayman/AirShotDown.gd" type="Script" id=17]
+[ext_resource path="res://_Highwayman/characters/Highwayman/ActionData/AirPistolShotData.tscn" type="PackedScene" id=18]
+[ext_resource path="res://_Highwayman/characters/Highwayman/HWM.gd" type="Script" id=19]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/use_extra_color_1 = false
+shader_param/use_extra_color_2 = false
+shader_param/extra_replace_color_1 = Color( 1, 0, 1, 1 )
+shader_param/extra_replace_color_2 = Color( 1, 0, 1, 1 )
+shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/extra_color_1 = Color( 1, 1, 1, 1 )
+shader_param/extra_color_2 = Color( 1, 1, 1, 1 )
+shader_param/max_color_distance = 0.01
+shader_param/super_dim = false
+shader_param/use_outline = false
+shader_param/outline_color = Color( 0, 0, 0, 1 )
+
+[node name="Highwayman" instance=ExtResource( 2 )]
+script = ExtResource( 19 )
+__meta__ = {
+"_editor_description_": ""
+}
+enable_extra_aesthetic_hitstop = true
+character_portrait = ExtResource( 12 )
+
+[node name="Sprite" parent="Flip" index="0"]
+material = SubResource( 1 )
+frames = ExtResource( 3 )
+animation = "AirShotHori"
+frame = 5
+
+[node name="DashForward" parent="StateMachine" index="27"]
+apply_forces = true
+
+[node name="PistolShot" type="Node2D" parent="StateMachine" index="57"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "PistolShot"
+anim_length = 16
+force_dir_x = "-1.0"
+force_speed = "2.0"
+force_tick = 6
+enter_force_dir_x = "1.0"
+enter_force_speed = "3"
+title = "Pistol Shot"
+type = 1
+button_texture = ExtResource( 5 )
+self_hit_cancellable = false
+interrupt_from_string = "GroundedAttack
+Grounded
+Wait"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+Jump"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/PistolShot" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 38
+y = -25
+width = 24
+height = 8
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+beats_grab = false
+hit_height = 0
+dir_y = "0.0"
+knockback = "5.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 6
+active_ticks = 1
+
+[node name="AirShotDown" type="Node2D" parent="StateMachine" index="58"]
+script = ExtResource( 17 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "AirShotDown"
+anim_length = 16
+force_dir_y = "-1.0"
+force_speed = "3.0"
+force_tick = 6
+title = "Pistol Shot"
+type = 1
+data_ui_scene = ExtResource( 18 )
+button_texture = ExtResource( 5 )
+air_type = 1
+land_cancel = true
+self_hit_cancellable = false
+interrupt_from_string = "Aerial
+AerialAttack
+"
+interrupt_into_string = "Grounded
+Aerial"
+hit_cancel_into_string = "AerialAttack
+Aerial"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/AirShotDown" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 5
+y = 19
+width = 13
+height = 18
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+beats_grab = false
+plus_frames = 1
+hit_height = 0
+dir_x = "0.0"
+dir_y = "1.0"
+knockback = "5.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 6
+active_ticks = 1
+
+[node name="AirShotHori" type="Node2D" parent="StateMachine" index="59"]
+script = ExtResource( 17 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "AirShotHori"
+anim_length = 16
+force_dir_x = "-1.0"
+force_speed = "2.0"
+force_tick = 6
+title = "Pistol Shot"
+show_in_menu = false
+type = 1
+button_texture = ExtResource( 5 )
+air_type = 1
+self_hit_cancellable = false
+interrupt_from_string = "Aerial
+AerialAttack
+"
+interrupt_into_string = "Grounded
+Aerial"
+hit_cancel_into_string = "AerialAttack
+Aerial"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/AirShotHori" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 42
+y = -24
+width = 22
+height = 13
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+beats_grab = false
+plus_frames = 1
+hit_height = 0
+dir_y = ".0"
+knockback = "5.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 6
+active_ticks = 1
+
+[node name="AirShotDiag" type="Node2D" parent="StateMachine" index="60"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "AirShotDiag"
+anim_length = 16
+force_dir_y = "-1.0"
+force_speed = "2.0"
+force_tick = 6
+title = "Pistol Shot"
+show_in_menu = false
+type = 1
+button_texture = ExtResource( 5 )
+air_type = 1
+land_cancel = true
+self_hit_cancellable = false
+interrupt_from_string = "Aerial
+AerialAttack
+"
+interrupt_into_string = "Grounded
+Aerial"
+hit_cancel_into_string = "AerialAttack
+Aerial"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/AirShotDiag" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 23
+y = -2
+width = 13
+height = 13
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+beats_grab = false
+plus_frames = 1
+hit_height = 0
+dir_y = "1.0"
+knockback = "5.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 6
+active_ticks = 1
+
+[node name="Hitbox2" type="Node2D" parent="StateMachine/AirShotDiag" index="1"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 38
+y = 14
+width = 8
+height = 8
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+beats_grab = false
+plus_frames = 1
+hit_height = 0
+dir_y = "1.0"
+knockback = "5.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 6
+active_ticks = 1
+
+[node name="DoubleCrossFollowup" type="Node2D" parent="StateMachine" index="61"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+reset_x_momentum = true
+sprite_animation = "DoubleCrossFollowup"
+anim_length = 27
+force_dir_x = "-1.0"
+force_speed = "5.0"
+force_tick = 17
+enter_force_dir_x = "-1.0"
+enter_force_speed = "2"
+title = "Execution"
+show_in_menu = false
+type = 2
+burst_cancellable = false
+burstable = false
+self_hit_cancellable = false
+self_interruptable = false
+instant_cancellable = false
+interrupt_from_string = "GroundedAttack
+Grounded
+Wait"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/DoubleCrossFollowup" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 38
+y = -23
+width = 24
+height = 19
+damage = 90
+minimum_damage = 10
+hitstun_ticks = 15
+hitlag_ticks = 8
+victim_hitlag = 10
+damage_proration = 1
+cancellable = false
+meter_gain_modifier = "2.0"
+ignore_armor = true
+beats_grab = false
+dir_y = "0.1"
+knockback = "15.0"
+grounded_hit_state = "HurtAerial"
+knockdown = true
+knockdown_extends_hitstun = false
+hard_knockdown = true
+disable_collision = false
+ground_bounce = false
+wall_slam = true
+start_tick = 17
+active_ticks = 1
+
+[node name="DoubleCross" type="Node2D" parent="StateMachine" index="62"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "DoubleCross"
+anim_length = 24
+force_dir_x = "1.0"
+force_speed = "10.0"
+force_tick = 6
+enter_force_dir_x = "-1.0"
+enter_force_speed = "2"
+title = "Double Cross"
+type = 2
+button_texture = ExtResource( 13 )
+neutral_only = true
+burst_cancellable = false
+burstable = false
+self_hit_cancellable = false
+self_interruptable = false
+instant_cancellable = false
+interrupt_from_string = "GroundedAttack
+Grounded
+Wait"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/DoubleCross" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 19
+y = -20
+width = 33
+height = 15
+damage = 60
+hitstun_ticks = 31
+hitlag_ticks = 8
+victim_hitlag = 31
+scale_combo = false
+cancellable = false
+di_modifier = "0.1"
+sdi_modifier = "0.1"
+meter_gain_modifier = "0"
+followup_state = "DoubleCrossFollowup"
+beats_grab = false
+hits_projectiles = false
+guard_break = true
+guard_break_proration = 0
+screenshake_frames = 3
+dir_y = "0.0"
+knockback = "0.1"
+disable_collision = false
+ground_bounce = false
+start_tick = 11
+active_ticks = 1
+
+[node name="ComboDoubleCross" type="Node2D" parent="StateMachine" index="63"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "DoubleCross"
+anim_length = 24
+force_dir_x = "1.0"
+force_speed = "10.0"
+force_tick = 6
+title = "Double Cross"
+type = 2
+button_texture = ExtResource( 13 )
+combo_only = true
+burst_cancellable = false
+burstable = false
+self_hit_cancellable = false
+self_interruptable = false
+instant_cancellable = false
+interrupt_from_string = "GroundedAttack
+Grounded
+Wait"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/ComboDoubleCross" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 19
+y = -20
+width = 33
+height = 15
+damage = 60
+hitstun_ticks = 31
+hitlag_ticks = 8
+victim_hitlag = 31
+scale_combo = false
+cancellable = false
+di_modifier = "0.1"
+sdi_modifier = "0.1"
+meter_gain_modifier = "0"
+followup_state = "DoubleCrossFollowup"
+beats_grab = false
+hits_projectiles = false
+guard_break = true
+guard_break_proration = 0
+screenshake_frames = 3
+dir_y = "0.0"
+knockback = "0.1"
+disable_collision = false
+ground_bounce = false
+start_tick = 11
+active_ticks = 1
+
+[node name="DuelistsAdvance" type="Node2D" parent="StateMachine" index="64"]
+script = ExtResource( 7 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+apply_custom_limits = true
+custom_max_air_speed = "100"
+custom_max_ground_speed = "100"
+sprite_animation = "DuelistsAdvance"
+anim_length = 20
+title = "Duelist's Advance"
+type = 1
+data_ui_scene = ExtResource( 16 )
+button_texture = ExtResource( 11 )
+self_hit_cancellable = false
+self_interruptable = false
+interrupt_from_string = "Grounded
+Wait"
+interrupt_into_string = "Grounded
+Wait"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/DuelistsAdvance" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 14
+y = -17
+height = 7
+damage = 100
+hitstun_ticks = 24
+victim_hitlag = 10
+beats_grab = false
+plus_frames = 2
+hit_sound = ExtResource( 9 )
+dir_y = "0.0"
+knockback = "8.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 10
+active_ticks = 2
+
+[node name="DuelistLeap" type="Node2D" parent="StateMachine" index="65"]
+script = ExtResource( 15 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+apply_custom_limits = true
+custom_max_air_speed = "22"
+custom_max_ground_speed = "100"
+fallback_state = "Fall"
+sprite_animation = "DuelistLeap"
+anim_length = 23
+force_dir_x = "1.0"
+force_dir_y = "0.8"
+force_speed = "10.0"
+force_tick = 9
+title = "Duelist's Leap"
+show_in_menu = false
+type = 1
+land_cancel = true
+self_hit_cancellable = false
+self_interruptable = false
+interrupt_from_string = "Grounded
+Wait"
+interrupt_into_string = "Grounded
+Aerial
+Wait"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+Aerial"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/DuelistLeap" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 13
+y = -10
+width = 12
+height = 9
+damage = 100
+hitstun_ticks = 12
+hitlag_ticks = 3
+victim_hitlag = 6
+beats_grab = false
+plus_frames = 2
+hit_sound = ExtResource( 9 )
+dir_y = "1.0"
+knockback = "6.0"
+disable_collision = false
+air_ground_bounce = true
+ground_bounce = false
+start_tick = 12
+
+[node name="LowShot" type="Node2D" parent="StateMachine" index="66"]
+script = ExtResource( 6 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "LowShot"
+anim_length = 17
+enter_force_dir_x = "1.0"
+enter_force_speed = "1.0"
+state_screenshake_tick = 6
+title = "Low Shot"
+type = 1
+button_texture = ExtResource( 10 )
+self_hit_cancellable = false
+self_interruptable = false
+interrupt_from_string = "GroundedIdle
+Grounded
+Wait"
+interrupt_into_string = "Grounded
+"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+Jump"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/LowShot" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 30
+y = -4
+width = 16
+height = 3
+damage = 75
+hitstun_ticks = 15
+hitlag_ticks = 7
+victim_hitlag = 10
+hits_otg = true
+beats_grab = false
+hit_height = 2
+dir_y = "-0.2"
+knockback = "3.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 7
+active_ticks = 2
+
+[node name="Hitbox2" type="Node2D" parent="StateMachine/LowShot" index="1"]
+z_index = 1000
+script = ExtResource( 8 )
+__meta__ = {
+"_editor_description_": ""
+}
+x = 17
+y = -11
+width = 9
+height = 10
+damage = 75
+hitstun_ticks = 15
+hitlag_ticks = 7
+victim_hitlag = 10
+hits_otg = true
+beats_grab = false
+plus_frames = 1
+hit_height = 2
+dir_y = "-0.2"
+knockback = "3.0"
+disable_collision = false
+ground_bounce = false
+start_tick = 7
+active_ticks = 1
+
+[node name="WickedSlice" type="Node2D" parent="StateMachine" index="67"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "WickedSlice"
+anim_length = 14
+enter_force_dir_x = "1.0"
+enter_force_speed = "4"
+title = "Wicked Slice"
+type = 1
+button_texture = ExtResource( 14 )
+self_hit_cancellable = false
+self_interruptable = false
+interrupt_from_string = "GroundedAttack
+Grounded
+Wait"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+Jump
+GroundMovement"
+initiative_effect = true
+initiative_startup_reduction_amount = 1
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/WickedSlice" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 11
+y = -15
+width = 33
+height = 7
+damage = 50
+hitstun_ticks = 10
+hitlag_ticks = 2
+victim_hitlag = 4
+damage_proration = 2
+beats_grab = false
+hits_projectiles = false
+plus_frames = -1
+dir_y = "0.0"
+knockback = "3.5"
+disable_collision = false
+ground_bounce = false
+start_tick = 5
+active_ticks = 1
