@@ -1068,7 +1068,6 @@ state_screenshake_tick = 4
 title = "Point Blank Shot"
 type = 2
 button_texture = ExtResource( 126 )
-flip_icon = false
 air_type = 2
 burst_cancellable = false
 self_hit_cancellable = false
