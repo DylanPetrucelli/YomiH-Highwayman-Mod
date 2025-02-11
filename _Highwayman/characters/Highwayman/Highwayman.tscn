@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=2]
+[gd_scene load_steps=133 format=2]
 
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=1]
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=2]
@@ -123,6 +123,13 @@
 [ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/AirPistolShotHori5.png" type="Texture" id=121]
 [ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/AirPistolShotHori6.png" type="Texture" id=122]
 [ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/WickedSlice2.png" type="Texture" id=123]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/OpenVein.png" type="Texture" id=124]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/PointBlankShot5.png" type="Texture" id=125]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Icons/PointBlankShot.png" type="Texture" id=126]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/PointBlankShot2.png" type="Texture" id=127]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/PointBlankShot4.png" type="Texture" id=128]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/PointBlankShot1.png" type="Texture" id=129]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/PointBlankShot3.png" type="Texture" id=130]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -291,6 +298,11 @@ animations = [ {
 "name": "PistolShot",
 "speed": 60.0
 }, {
+"frames": [ ExtResource( 129 ), ExtResource( 129 ), ExtResource( 129 ), ExtResource( 127 ), ExtResource( 130 ), ExtResource( 128 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 125 ), ExtResource( 70 ), ExtResource( 70 ), ExtResource( 70 ), ExtResource( 70 ) ],
+"loop": true,
+"name": "PointBlankShot",
+"speed": 60.0
+}, {
 "frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 24 ) ],
 "loop": true,
 "name": "RollBackward",
@@ -333,8 +345,8 @@ character_portrait = ExtResource( 12 )
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 frames = SubResource( 2 )
-animation = "OpenVeinFollowup"
-frame = 20
+animation = "PistolShot"
+frame = 5
 
 [node name="DashForward" parent="StateMachine" index="27"]
 apply_forces = true
@@ -361,6 +373,7 @@ Wait"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
+GroundedSuper
 Jump"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/PistolShot" index="0"]
@@ -411,7 +424,8 @@ AerialAttack
 interrupt_into_string = "Grounded
 Aerial"
 hit_cancel_into_string = "AerialAttack
-Aerial"
+Aerial
+AerialSuper"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/AirShotDown" index="0"]
 z_index = 1000
@@ -462,7 +476,15 @@ AerialAttack
 interrupt_into_string = "Grounded
 Aerial"
 hit_cancel_into_string = "AerialAttack
-Aerial"
+AerialSpecial
+AerialSuper
+AerialMovement
+Aerial
+GroundedAttack
+GroundedSpecial
+GroundedSuper
+Grounded
+"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/AirShotHori" index="0"]
 z_index = 1000
@@ -510,6 +532,8 @@ AerialAttack
 interrupt_into_string = "Grounded
 Aerial"
 hit_cancel_into_string = "AerialAttack
+AerialSuper
+AerialSpecial
 Aerial"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/AirShotDiag" index="0"]
@@ -743,7 +767,7 @@ interrupt_into_string = "Grounded
 Wait"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-"
+GroundedSuper"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/DuelistsAdvance" index="0"]
 z_index = 1000
@@ -795,7 +819,10 @@ Aerial
 Wait"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-Aerial"
+Aerial
+AerialAttack
+AerialSpecial
+AerialSuper"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/DuelistLeap" index="0"]
 z_index = 1000
@@ -840,6 +867,7 @@ interrupt_into_string = "Grounded
 "
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
+GroundedSuper
 Jump"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/LowShot" index="0"]
@@ -908,6 +936,7 @@ Wait"
 interrupt_into_string = "Grounded"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
+GroundedSuper
 Jump
 GroundMovement"
 initiative_effect = true
@@ -946,7 +975,7 @@ enter_force_dir_x = "1.0"
 enter_force_speed = "1.0"
 title = "Open Vein"
 type = 2
-button_texture = ExtResource( 13 )
+button_texture = ExtResource( 124 )
 self_hit_cancellable = false
 self_interruptable = false
 interrupt_from_string = "Grounded
@@ -982,13 +1011,13 @@ script = ExtResource( 23 )
 sprite_animation = "OpenVeinFollowup"
 anim_length = 28
 throw_positions = {
-ExtResource( 106 ): {
-"x": 23,
-"y": 0
-},
 ExtResource( 110 ): {
 "x": 13,
 "y": -7
+},
+ExtResource( 106 ): {
+"x": 23,
+"y": 0
 }
 }
 title = "Big Fucking Stab"
@@ -1024,3 +1053,55 @@ dir_y = "1.0"
 knockback = "0.0"
 start_tick = 21
 active_ticks = 4
+
+[node name="PointBlankShot" type="Node2D" parent="StateMachine" index="70"]
+script = ExtResource( 4 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "PointBlankShot"
+anim_length = 18
+force_dir_x = "-1.0"
+force_speed = "6.0"
+force_tick = 4
+state_screenshake_tick = 4
+title = "Point Blank Shot"
+type = 2
+button_texture = ExtResource( 126 )
+flip_icon = false
+air_type = 2
+burst_cancellable = false
+self_hit_cancellable = false
+self_interruptable = false
+instant_cancellable = false
+can_feint_if_possible = false
+interrupt_from_string = "GroundedAttack
+GroundedSpecial
+GroundedMovement
+Aerial
+AerialMovement
+AerialAttack
+AerialSpecial"
+interrupt_into_string = "Grounded
+Aerial"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/PointBlankShot" index="0"]
+z_index = 1000
+script = ExtResource( 8 )
+x = 16
+y = -21
+width = 13
+height = 19
+damage = 200
+minimum_damage = 100
+hitlag_ticks = 15
+victim_hitlag = 15
+damage_proration = 1
+cancellable = false
+plus_frames = 3
+dir_y = "0.4"
+grounded_hit_state = "HurtAerial"
+knockdown = true
+ground_bounce = false
+wall_slam = true
+start_tick = 4
