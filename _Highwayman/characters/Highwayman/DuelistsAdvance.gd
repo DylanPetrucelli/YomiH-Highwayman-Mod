@@ -17,8 +17,6 @@ func _enter():
 		if data.y == -1:
 			return "DuelistLeap"
 
-
-
 func _frame_0():
 	var facing = host.get_facing_int();
 	if fixed.gt(host.get_vel().x, "0"): #going right
