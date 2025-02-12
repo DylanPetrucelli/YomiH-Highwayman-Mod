@@ -1,6 +1,7 @@
 extends Fighter
 
 var BleedTimer = 0;
+var leper = ""
 
 func _ready():
 	pass 
@@ -14,3 +15,4 @@ func tick():
 #func _on_hit_something(obj, hitbox):
 #	if obj == host.opponent:
 #		host.BleedTimer = 60
+	

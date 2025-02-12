@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://projectile/BaseProjectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=2]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Summons/Leper2.png" type="Texture" id=3]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Summons/Leper3.png" type="Texture" id=4]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Summons/Leper1.png" type="Texture" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "LeperChop",
+"speed": 60.0
+} ]
+
+[node name="LeperProj" instance=ExtResource( 1 )]
+deletes_other_projectiles = false
+can_be_hit_by_melee = true
+
+[node name="Sprite" parent="Flip" index="0"]
+frames = SubResource( 1 )
+animation = "LeperChop"
+frame = 19
+
+[node name="Default" parent="StateMachine" index="0"]
+sprite_animation = "LeperChop"
+anim_length = -1
+move_x = 0
+clash = false
+lifetime = 33
+fizzle_on_ground = false
+fizzle_on_walls = false
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Default" index="0"]
+z_index = 1000
+script = ExtResource( 2 )
+x = 31
+y = -9
+height = 28
+damage = 150
+minimum_damage = 50
+hitlag_ticks = 10
+victim_hitlag = 10
+cancellable = false
+hits_otg = true
+ignore_armor = true
+hits_projectiles = false
+allowed_to_hit_own_team = false
+plus_frames = 2
+hit_height = 0
+dir_x = "0.5"
+dir_y = "1.0"
+grounded_hit_state = "HurtAerial"
+knockdown = true
+air_ground_bounce = true
+start_tick = 20
+active_ticks = 3
