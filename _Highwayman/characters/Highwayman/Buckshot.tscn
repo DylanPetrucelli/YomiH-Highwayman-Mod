@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://mechanics/Hitbox.gd" type="Script" id=1]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Buckshot.png" type="Texture" id=2]
+[ext_resource path="res://projectile/BaseProjectile.tscn" type="PackedScene" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="Buckshot" instance=ExtResource( 3 )]
+air_friction = "2.5"
+fizzle_on_ceiling = true
+can_be_hit_by_melee = true
+hit_cancel_on_hit = true
+
+[node name="Sprite" parent="Flip" index="0"]
+position = Vector2( 0, 4.76837e-07 )
+scale = Vector2( 2, 1 )
+frames = SubResource( 1 )
+
+[node name="CollisionBox" parent="." index="2"]
+width = 8
+height = 4
+
+[node name="Hurtbox" parent="." index="3"]
+width = 10
+height = 4
+
+[node name="Default" parent="StateMachine" index="0"]
+apply_forces = true
+apply_forces_no_limit = true
+apply_custom_limits = true
+custom_max_air_speed = "999"
+custom_max_ground_speed = "999"
+move_x = 0
+lifetime = 20
+fizzle_on_hit_opponent = true
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/Default" index="0"]
+z_index = 1000
+script = ExtResource( 1 )
+width = 8
+height = 4
+damage = 25
+minimum_damage = 5
+hitstun_ticks = 13
+di_modifier = "0.5"
+plus_frames = 1
+dir_y = "0.0"
+ground_bounce = false
+start_tick = 1
+active_ticks = 21
+always_on = true

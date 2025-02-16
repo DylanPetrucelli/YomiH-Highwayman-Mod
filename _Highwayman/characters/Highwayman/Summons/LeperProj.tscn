@@ -24,6 +24,7 @@ animation = "LeperChop"
 frame = 19
 
 [node name="Default" parent="StateMachine" index="0"]
+apply_fric = true
 sprite_animation = "LeperChop"
 anim_length = -1
 move_x = 0

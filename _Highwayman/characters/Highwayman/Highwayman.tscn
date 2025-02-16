@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=2]
+[gd_scene load_steps=145 format=2]
 
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=1]
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=2]
@@ -140,6 +140,8 @@
 [ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Summons/Leper3.png" type="Texture" id=138]
 [ext_resource path="res://_Highwayman/characters/Highwayman/Sprites/Summons/Leper1.png" type="Texture" id=139]
 [ext_resource path="res://_Highwayman/characters/Highwayman/LeperSummon.gd" type="Script" id=140]
+[ext_resource path="res://_Highwayman/characters/Highwayman/ActionData/GrapeshotBlastData.tscn" type="PackedScene" id=141]
+[ext_resource path="res://_Highwayman/characters/Highwayman/Grapeshot Blast.gd" type="Script" id=142]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -366,8 +368,8 @@ character_portrait = ExtResource( 12 )
 [node name="Sprite" parent="Flip" index="0"]
 material = SubResource( 1 )
 frames = SubResource( 2 )
-animation = "LeperSummon"
-frame = 6
+animation = "PistolShot"
+frame = 5
 
 [node name="Wait" parent="StateMachine" index="11"]
 interrupt_into_string = "Grounded
@@ -689,6 +691,8 @@ instant_cancellable = false
 interrupt_from_string = "GroundedAttack
 Grounded
 Wait"
+interrupt_into_string = "Grounded
+Wait"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/DoubleCross" index="0"]
 z_index = 1000
@@ -793,10 +797,12 @@ self_interruptable = false
 interrupt_from_string = "Grounded
 Wait"
 interrupt_into_string = "Grounded
+PointBlank
 Wait"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-GroundedSuper"
+GroundedSuper
+PointBlank"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/DuelistsAdvance" index="0"]
 z_index = 1000
@@ -807,6 +813,7 @@ height = 7
 damage = 100
 hitstun_ticks = 24
 victim_hitlag = 10
+di_modifier = "0.8"
 beats_grab = false
 plus_frames = 2
 hit_sound = ExtResource( 9 )
@@ -848,10 +855,11 @@ Aerial
 Wait"
 hit_cancel_into_string = "GroundedAttack
 GroundedSpecial
-Aerial
 AerialAttack
 AerialSpecial
-AerialSuper"
+AerialSuper
+PointBlank"
+hit_cancel_exceptions_string = "DuelistsAdvance"
 
 [node name="Hitbox" type="Node2D" parent="StateMachine/DuelistLeap" index="0"]
 z_index = 1000
@@ -983,6 +991,7 @@ hitstun_ticks = 10
 hitlag_ticks = 2
 victim_hitlag = 4
 damage_proration = 2
+di_modifier = "0.8"
 beats_grab = false
 hits_projectiles = false
 plus_frames = -1
@@ -1105,8 +1114,9 @@ self_hit_cancellable = false
 self_interruptable = false
 instant_cancellable = false
 can_feint_if_possible = false
-interrupt_from_string = "Grounded
-"
+interrupt_from_string = "GroundedMovement
+AirMovement
+PointBlank"
 interrupt_into_string = "Grounded
 "
 
@@ -1124,7 +1134,9 @@ victim_hitlag = 15
 damage_proration = 1
 cancellable = false
 plus_frames = 3
-dir_y = "-0.2"
+dir_y = "0.0"
+knockback = "8.0"
+grounded_hit_state = "HurtAerial"
 knockdown = true
 ground_bounce = false
 wall_slam = true
@@ -1139,10 +1151,12 @@ apply_forces = true
 apply_fric = true
 apply_grav = true
 reset_x_momentum = true
+apply_custom_limits = true
+custom_max_ground_speed = "17.0"
 sprite_animation = "DashForward"
 anim_length = 20
 enter_force_dir_x = "1.0"
-enter_force_speed = "15.0"
+enter_force_speed = "17.0"
 title = "ExDash"
 iasa_at = 10
 interruptible_on_opponent_turn = true
@@ -1150,8 +1164,9 @@ dynamic_iasa = false
 next_state_on_hold_on_opponent_turn = true
 reversible = false
 interrupt_from_string = "Wait
-Grounded"
-interrupt_into_string = "Grounded
+Grounded
+GroundedMovement"
+interrupt_into_string = "GroundedMovement
 Wait"
 
 [node name="LeperSummon" type="Node2D" parent="StateMachine" index="72"]
@@ -1175,3 +1190,23 @@ interrupt_from_string = "Wait
 Grounded"
 interrupt_into_string = "Wait
 Grounded"
+
+[node name="Grapeshot Blast" type="Node2D" parent="StateMachine" index="73"]
+script = ExtResource( 142 )
+sprite_animation = "PistolShot"
+anim_length = 20
+projectile_match_facing = true
+title = "Grapeshot Blast"
+type = 2
+data_ui_scene = ExtResource( 141 )
+self_hit_cancellable = false
+self_interruptable = false
+interrupt_from_string = "Wait
+Grounded"
+interrupt_into_string = "Wait
+GroundedMovement
+Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedMovement
+Dash"
